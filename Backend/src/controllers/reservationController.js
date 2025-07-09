@@ -82,8 +82,8 @@ reservationController.updateReservation = async ( req , res ) => {
     try {
         
         const { clientID , vehicle , service , status } = req.body;
-        const updateClient = await clientModel.findByIdAndUpdate(req.params.id , { clientID , vehicle , service , status })
-        res.json({message: "La se reserva se ha actualizado!"});
+        const updateClient = await reservationModel.findByIdAndUpdate(req.params.id , { clientID , vehicle , service , status })
+        res.json({message: "La reserva se ha actualizado!"});
 
         //Validación de campos vacíos
         if(!clientID || !vehicle || !service || !status) {

@@ -1,0 +1,546 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Simple Inventory API",
+    "description": "This is a simple API",
+    "contact": {
+      "email": "you@your-company.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://virtserver.swaggerhub.com/ricaldone-302/Part_Plus/1.0.0",
+      "description": "SwaggerHub API Auto Mocking"
+    }
+  ],
+  "tags": [
+    {
+      "name": "admins",
+      "description": "Secured Admin-only calls"
+    },
+    {
+      "name": "developers",
+      "description": "Operations available to regular developers"
+    }
+  ],
+  "paths": {
+    "/inventory": {
+      "get": {
+        "tags": [
+          "developers"
+        ],
+        "summary": "searches inventory",
+        "description": "By passing in the appropriate options, you can search for\navailable inventory in the system\n",
+        "operationId": "searchInventory",
+        "parameters": [
+          {
+            "name": "searchString",
+            "in": "query",
+            "description": "pass an optional search string for looking up inventory",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "number of records to skip for pagination",
+            "required": false,
+            "schema": {
+              "minimum": 0,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "maximum number of records to return",
+            "required": false,
+            "schema": {
+              "maximum": 50,
+              "minimum": 0,
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "search results matching criteria",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/InventoryItem"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad input parameter"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "admins"
+        ],
+        "summary": "adds an inventory item",
+        "description": "Adds an item to the system",
+        "operationId": "addInventory",
+        "requestBody": {
+          "description": "Inventory item to add",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InventoryItem"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "item created"
+          },
+          "400": {
+            "description": "invalid input, object invalid"
+          },
+          "409": {
+            "description": "an existing item already exists"
+          }
+        }
+      }
+    },
+    "/client": {
+      "get": {
+        "tags": [
+          "Clientes"
+        ],
+        "summary": "Mostrar Clientes",
+        "description": "Se selecciona todos los clientes de la colección \"Client\"",
+        "operationId": "get-client",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Clientes"
+        ],
+        "summary": "Actualizar clientes",
+        "description": "Nos permite actualizar la información de los clientes",
+        "operationId": "put-client",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/client_body"
+              },
+              "examples": {
+                "Example 1": {
+                  "value": {
+                    "id": "string",
+                    "name": "string",
+                    "email": "string",
+                    "password": "string",
+                    "age": 0
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Se ha actualizado satisfactoriamente!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Clientes"
+        ],
+        "summary": "Insertar Clientes",
+        "description": "Se inserta un cliente a la vez.",
+        "operationId": "post-client",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/client_body_1"
+              },
+              "examples": {
+                "Example 1": {
+                  "value": {
+                    "name": "string",
+                    "email": "string",
+                    "password": "string",
+                    "phone": "string",
+                    "age": 0
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Se ha agregado un nuevo cliente!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Clientes"
+        ],
+        "summary": "Eliminar Clientes",
+        "description": "Nos permite eliminar el registro de un cliente.",
+        "operationId": "delete-client",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Se ha eliminado un registro de cliente!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/reservation": {
+      "get": {
+        "tags": [
+          "Reservation"
+        ],
+        "summary": "Mostrar Reservaciones",
+        "description": "Muestra todas las reservaciones que se han ingreso en la colección \"Reservaciones\".",
+        "operationId": "get-reservation",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Reservation"
+        ],
+        "summary": "Actualizar Reservas",
+        "description": "Permite actualizar el registro de la reserva ya guardada.",
+        "operationId": "put-reservation",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/reservation_body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Se ha actualizado la reservación!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Reservation"
+        ],
+        "summary": "Insertar Reservas",
+        "description": "Inserta los nuevos registros de reserva.",
+        "operationId": "post-reservation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/reservation_body_1"
+              },
+              "examples": {
+                "Example 1": {
+                  "value": {
+                    "clientID": "string",
+                    "vehicle": "string",
+                    "service": "string",
+                    "status": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Se ha guardado una nueva reserva!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Reservation"
+        ],
+        "summary": "Eliminar Reserva",
+        "description": "Se elimina el registro de la reserva.",
+        "operationId": "delete-reservation",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Se ha eliminado satisfactoriamente la reserva!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "InventoryItem": {
+        "required": [
+          "id",
+          "manufacturer",
+          "name",
+          "releaseDate"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+          },
+          "name": {
+            "type": "string",
+            "example": "Widget Adapter"
+          },
+          "releaseDate": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2016-08-29T09:12:33.001Z"
+          },
+          "manufacturer": {
+            "$ref": "#/components/schemas/Manufacturer"
+          }
+        }
+      },
+      "Manufacturer": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "ACME Corporation"
+          },
+          "homePage": {
+            "type": "string",
+            "format": "url",
+            "example": "https://www.acme-corp.com"
+          },
+          "phone": {
+            "type": "string",
+            "example": "408-867-5309"
+          }
+        }
+      },
+      "client_body": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "m7drir0hlm2p2"
+            }
+          },
+          "name": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "v2ukrao6sacr5"
+            }
+          },
+          "email": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "7g7zmkwpi57kp"
+            }
+          },
+          "password": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "4joa0wxhzzcj9"
+            }
+          },
+          "age": {
+            "type": "number",
+            "x-stoplight": {
+              "id": "57vc2obc1thu6"
+            }
+          }
+        }
+      },
+      "client_body_1": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "tq48urnfwz6o8"
+            }
+          },
+          "email": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "ofud8lyewstor"
+            }
+          },
+          "password": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "vdjct7r9gw8j2"
+            }
+          },
+          "phone": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "ts13dpajxgp36"
+            }
+          },
+          "age": {
+            "type": "number",
+            "x-stoplight": {
+              "id": "wlqlb0e624sn0"
+            }
+          }
+        }
+      },
+      "reservation_body": {
+        "type": "object",
+        "properties": {
+          "clientID": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "ouswyodecuqxw"
+            }
+          },
+          "vehicle": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "tcjj8rslvtk99"
+            }
+          },
+          "service": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "xxkfxk2vaaa5g"
+            }
+          },
+          "status": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "ohgf27inm3fpc"
+            }
+          }
+        }
+      },
+      "reservation_body_1": {
+        "type": "object",
+        "properties": {
+          "clientID": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "5oalriicdnic3"
+            }
+          },
+          "vehicle": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "0vmiwem6q6b0t"
+            }
+          },
+          "service": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "oeg0ivcz2yvxr"
+            }
+          },
+          "status": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "pl4gq9jho9og0"
+            }
+          }
+        }
+      }
+    }
+  }
+}

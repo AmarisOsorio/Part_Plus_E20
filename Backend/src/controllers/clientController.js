@@ -30,8 +30,16 @@ clientController.getClientById = async ( req , res ) => {
 
 clientController.insertClient = async (req , res) => {
 
+    const { name , email , password , phone , age } = req.body;
+
+
     try {
-        const { name , email , password , phone , age } = req.body;
+
+        //Verifica que el usuario ingresado no se repita por medio del correo
+        const existClient = await clientModel.findOne({email})
+        if(existClient){
+            return res.json({message: "Este cliente ya esta registrado"})
+        }
 
         //Validación de campos vacíos
         if(!name || !email || !password || !phone || !age) {
@@ -42,6 +50,7 @@ clientController.insertClient = async (req , res) => {
         if(phone.length > 9){
             res.status(400).json({message: "Favor llenar el campo de esta manera: 1234-4567"})
         }
+
 
         const newClient = new clientModel({ name , email , password , phone , age })
         await newClient.save()
